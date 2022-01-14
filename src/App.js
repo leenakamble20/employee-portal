@@ -16,6 +16,7 @@ import { loadEmployees } from './actions/action-creator'
 
 //amplify packages
 import { Amplify } from 'aws-amplify'
+import { Auth } from 'aws-amplify'
 import { Authenticator } from '@aws-amplify/ui-react'
 import '@aws-amplify/ui-react/styles.css';
 import awsEXports from './aws-exports';
@@ -23,7 +24,8 @@ Amplify.configure(awsEXports);
 
 function App({ loadEmployees }) {
   loadEmployees();
-  return (
+  return (<>
+    <button onClick={() => Auth.federatedSignIn()}>Open Hosted UI</button>
     <Authenticator loginMechanisms={['username']}>
     {({signOut,user})=>(
     <Router>
@@ -36,7 +38,8 @@ function App({ loadEmployees }) {
               <Nav.Link as={Link} to="/">Home</Nav.Link>
               <Nav.Link as={Link} to="/about">About</Nav.Link>
               <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
-              <Nav.Link onCLick={signOut}>SignOut</Nav.Link>
+              
+              <Nav.Link onClick={signOut}>SignOut</Nav.Link>
               <Nav.Link> Welocme {user.username}</Nav.Link>
             </Nav>
           </Navbar.Collapse>
@@ -55,7 +58,8 @@ function App({ loadEmployees }) {
     </Router>
     )}
     </Authenticator>
-  );
+    </>);
+  
 }
 
 function mapDispatchToProps(dispatch) {
